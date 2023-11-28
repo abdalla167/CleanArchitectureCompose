@@ -1,29 +1,19 @@
 package com.example.firstprojectcompose.gyms.data
 
-import com.example.firstprojectcompose.GymApplication
-import com.example.firstprojectcompose.gyms.data.local.GymDataBase
+import com.example.firstprojectcompose.gyms.data.local.GymDAO
 import com.example.firstprojectcompose.gyms.data.local.GymFavouretState
 import com.example.firstprojectcompose.gyms.data.local.LocalGym
 import com.example.firstprojectcompose.gyms.data.remot.GymsApiServec
 import com.example.firstprojectcompose.gyms.domain.Gym
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class GymsReposatery {
+@Singleton
+class GymsReposatery @Inject constructor( val apiServec: GymsApiServec,  private var gymDAO : GymDAO) {
 
 
-    val apiServec: GymsApiServec =
-        Retrofit.Builder()
-            .addConverterFactory(GsonConverterFactory.create())
-            .baseUrl("https://cairo-gyms-822da-default-rtdb.firebaseio.com/")
-            .build()
-            .create(GymsApiServec::class.java)
-
-    private var gymDAO = GymDataBase.getDAO(
-        GymApplication.getApplicationContext()
-    )
 
     suspend fun loadGyms() = withContext(Dispatchers.IO) {
         try {

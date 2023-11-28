@@ -1,9 +1,10 @@
 package com.example.firstprojectcompose.gyms.domain
 
 import com.example.firstprojectcompose.gyms.data.GymsReposatery
+import javax.inject.Inject
 
-class GetSortedUsecase  {
-    private val gymsReposatery = GymsReposatery()
+class GetSortedUsecase @Inject constructor(  private val gymsReposatery : GymsReposatery)  {
+
 
     suspend fun invoke () :List<Gym>
     {

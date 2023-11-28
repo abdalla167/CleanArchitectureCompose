@@ -9,15 +9,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.firstprojectcompose.gyms.domain.GetInitialGymsAllUseCAse
 import com.example.firstprojectcompose.gyms.domain.ToggelFavouretStatUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class GymsViewModel() : ViewModel() {
-
-
-
-
-
+@HiltViewModel
+class GymsViewModel @Inject constructor ( private val getInitialAllGymsUseCase : GetInitialGymsAllUseCAse ,
+                                  private val toggleFavouriteStateUseCase : ToggelFavouretStatUseCase ) : ViewModel() {
 
   private  var _stat by mutableStateOf(
       GymsScreenState(
@@ -27,10 +26,6 @@ class GymsViewModel() : ViewModel() {
   )
     val stat : State<GymsScreenState>
         get() = derivedStateOf { _stat }
-
-
-    private val getInitialAllGymsUseCase = GetInitialGymsAllUseCAse()
-    private val toggleFavouriteStateUseCase = ToggelFavouretStatUseCase()
 
 
     private val errorHandle = CoroutineExceptionHandler { _, throwable ->
@@ -44,13 +39,8 @@ class GymsViewModel() : ViewModel() {
     }
 
     init {
-
-
 getGyms()
-
-
     }
-
 
     fun getGyms() {
         viewModelScope.launch(errorHandle)
@@ -60,12 +50,8 @@ getGyms()
                 gym = receivAllGyms,
                 isLoading = false
             )
-
         }
     }
-
-
-
     fun toggleFavouriteStat(gymId: Int,oldValue:Boolean) {
 
         viewModelScope.launch {
