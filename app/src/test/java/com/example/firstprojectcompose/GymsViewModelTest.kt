@@ -25,11 +25,13 @@ import org.junit.Test
 class GymsViewModelTest {
 
     private val dispatcher = StandardTestDispatcher()
+
     private val scope = TestScope(dispatcher)
     @Test
     fun loadingStat_isLoading_true()=scope.runTest {
         // Given
         val viewModel = getGymsViewModel()
+        advanceUntilIdle()
         val state = viewModel.stat.value
         assert(state == GymsScreenState(
             gym = emptyList(),
@@ -58,60 +60,61 @@ class GymsViewModelTest {
         val gymsReposatery =GymsReposatery(TestGymsApiService(),TestGymsDAO(),dispatcher)
         val getSortedUsecase =GetSortedUsecase(gymsReposatery)
         val getInitialGymsAllUseCAse = GetInitialGymsAllUseCAse(gymsReposatery,getSortedUsecase)
-        val toggelfavouretstatusecaseFactory = ToggelFavouretStatUseCase(gymsReposatery,getInitialGymsAllUseCAse)
+        val toggelfavouretstatusecaseFactory = ToggelFavouretStatUseCase(gymsReposatery, getSortedUsecase = getSortedUsecase)
         return GymsViewModel(getInitialGymsAllUseCAse,toggelfavouretstatusecaseFactory,dispatcher )
     }
-    class TestGymsApiService : GymsApiServec
-    {
-        override suspend fun getGyms(): List<RemotGym> {
-         return DummyGymsList_.getDummyGymsList()
-        }
 
-        override suspend fun getGym(id: Int): Map<String, RemotGym> {
-            TODO("Not yet implemented")
-        }
 
+
+}
+class TestGymsApiService : GymsApiServec
+{
+    override suspend fun getGyms(): List<RemotGym> {
+        return DummyGymsList_.getDummyGymsList()
     }
-    class TestGymsDAO : GymDAO{
 
-        private var gyms =HashMap<Int , LocalGym>()
+    override suspend fun getGym(id: Int): Map<String, RemotGym> {
+        TODO("Not yet implemented")
+    }
 
-        override suspend fun getAll(): List<LocalGym> {
-           return gyms.values.toList()
-        }
+}
+class TestGymsDAO : GymDAO{
 
-        override suspend fun addAll(gyms: List<LocalGym>) {
-           gyms.forEach {
-               this.gyms[it.id] = it
+    private var gyms =HashMap<Int , LocalGym>()
 
-           }
-        }
+    override suspend fun getAll(): List<LocalGym> {
+        return gyms.values.toList()
+    }
 
-        override suspend fun update(gymfavouertStat: GymFavouretState) {
+    override suspend fun addAll(gyms: List<LocalGym>) {
+        gyms.forEach {
+            this.gyms[it.id] = it
 
-            UpdatGym(gymfavouertStat)
-        }
-
-        override suspend fun getFavouertGym(): List<LocalGym> {
-
-            return gyms.values.toList().filter { it.isFavourite }
-
-
-        }
-
-        override suspend fun updateAll(gymfavouertStat: List<GymFavouretState>) {
-            gymfavouertStat.forEach {
-                UpdatGym(it)
-            }
-        }
-
-        private fun UpdatGym(gymfavouertStat: GymFavouretState) {
-            val gym = this.gyms[gymfavouertStat.id]
-            gym?.let {
-                this.gyms[it.id] = it.copy(isFavourite = gymfavouertStat.isFavourite)
-            }
         }
     }
 
+    override suspend fun update(gymfavouertStat: GymFavouretState) {
 
+        UpdatGym(gymfavouertStat)
+    }
+
+    override suspend fun getFavouertGym(): List<LocalGym> {
+
+        return gyms.values.toList().filter { it.isFavourite }
+
+
+    }
+
+    override suspend fun updateAll(gymfavouertStat: List<GymFavouretState>) {
+        gymfavouertStat.forEach {
+            UpdatGym(it)
+        }
+    }
+
+    private fun UpdatGym(gymfavouertStat: GymFavouretState) {
+        val gym = this.gyms[gymfavouertStat.id]
+        gym?.let {
+            this.gyms[it.id] = it.copy(isFavourite = gymfavouertStat.isFavourite)
+        }
+    }
 }
