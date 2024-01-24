@@ -1,4 +1,4 @@
-package com.example.firstprojectcompose.gyms.data.remot
+package com.example.firstprojectcompose.data.remot
 
 
 import com.google.gson.annotations.SerializedName
@@ -11,8 +11,8 @@ data class RemotGym(
     @SerializedName("gym_name")
     val name: String,
     @SerializedName("gym_location")
-    val places: String,
+    val place: String,
     @SerializedName("is_open")
-    val isOpend:Boolean,
+    val isOpen: Boolean,
 
 )

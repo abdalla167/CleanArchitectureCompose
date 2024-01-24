@@ -70,6 +70,7 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+    debugImplementation("androidx.compose.ui:ui-test-manifest:1.5.4")
 
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
 
@@ -94,11 +95,20 @@ dependencies {
     implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
 
 
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.1")
 
     implementation ("androidx.activity:activity-ktx:1.8.1")
     implementation ("androidx.fragment:fragment-ktx:1.6.2")
     implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
     implementation ("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
+
+
+
+
+
+
+
+
 
 
 }

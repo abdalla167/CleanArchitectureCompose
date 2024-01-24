@@ -1,4 +1,4 @@
-package com.example.firstprojectcompose.gyms.domain
+package com.example.firstprojectcompose.domain
 
 
 data class Gym(

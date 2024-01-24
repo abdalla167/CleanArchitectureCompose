@@ -1,10 +1,10 @@
-package com.example.firstprojectcompose.gyms.data.di
+package com.example.firstprojectcompose.data.di
 
 import android.content.Context
 import androidx.room.Room
-import com.example.firstprojectcompose.gyms.data.local.GymDAO
-import com.example.firstprojectcompose.gyms.data.local.GymDataBase
-import com.example.firstprojectcompose.gyms.data.remot.GymsApiServec
+import com.example.firstprojectcompose.data.local.GymDAO
+import com.example.firstprojectcompose.data.local.GymDataBase
+import com.example.firstprojectcompose.data.remot.GymsApiServec
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -51,7 +51,7 @@ object GymsDataModule {
 
     @Singleton
     @Provides
-    fun provideApi(retrofit:Retrofit):GymsApiServec
+    fun provideApi(retrofit:Retrofit): GymsApiServec
     {
         return retrofit.create(GymsApiServec::class.java)
 

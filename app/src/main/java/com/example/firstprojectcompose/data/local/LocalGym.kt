@@ -1,4 +1,4 @@
-package com.example.firstprojectcompose.gyms.data.local
+package com.example.firstprojectcompose.data.local
 
 import android.os.Parcelable
 import androidx.room.ColumnInfo
@@ -18,5 +18,5 @@ data class LocalGym(
     @ColumnInfo(name = "gym_location")
     val places: String,
     val isOpend:Boolean,
-    val isFavourite: Boolean = false
+    var isFavourite: Boolean = false
 ) : Parcelable

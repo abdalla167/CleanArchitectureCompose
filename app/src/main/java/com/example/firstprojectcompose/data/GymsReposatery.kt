@@ -1,21 +1,27 @@
-package com.example.firstprojectcompose.gyms.data
+package com.example.firstprojectcompose.data
 
-import com.example.firstprojectcompose.gyms.data.local.GymDAO
-import com.example.firstprojectcompose.gyms.data.local.GymFavouretState
-import com.example.firstprojectcompose.gyms.data.local.LocalGym
-import com.example.firstprojectcompose.gyms.data.remot.GymsApiServec
-import com.example.firstprojectcompose.gyms.domain.Gym
+import com.example.firstprojectcompose.data.di.IODispatcher
+import com.example.firstprojectcompose.data.local.GymDAO
+import com.example.firstprojectcompose.data.local.GymFavouretState
+import com.example.firstprojectcompose.data.local.LocalGym
+import com.example.firstprojectcompose.data.remot.GymsApiServec
+import com.example.firstprojectcompose.domain.Gym
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class GymsReposatery @Inject constructor( val apiServec: GymsApiServec,  private var gymDAO : GymDAO) {
+class GymsReposatery @Inject constructor(
+    val apiServec: GymsApiServec,
+    private var gymDAO : GymDAO,
+    @IODispatcher private val ioDispatcher: CoroutineDispatcher
+    ) {
 
 
 
-    suspend fun loadGyms() = withContext(Dispatchers.IO) {
+    suspend fun loadGyms() = withContext(ioDispatcher) {
         try {
 
             updateLocaleDatabase()
@@ -29,7 +35,7 @@ class GymsReposatery @Inject constructor( val apiServec: GymsApiServec,  private
 
     suspend fun getGyms():List<Gym>
     {
-        return withContext(Dispatchers.IO){
+        return withContext(ioDispatcher){
 
             return@withContext gymDAO.getAll().map {
                 Gym(it.id,it.name,it.places,it.isOpend,it.isFavourite)
@@ -42,7 +48,7 @@ class GymsReposatery @Inject constructor( val apiServec: GymsApiServec,  private
 
         val favouriteGymsList = gymDAO.getFavouertGym()
         gymDAO.addAll(gyms.map {
-            LocalGym(it.id,it.name,it.places,it.isOpend )
+            LocalGym(it.id,it.name,it.place,it.isOpen )
         })
         gymDAO.updateAll(
             favouriteGymsList.map {
@@ -52,7 +58,7 @@ class GymsReposatery @Inject constructor( val apiServec: GymsApiServec,  private
     }
 
     suspend fun toggleFavouriteGym(gymId: Int, state: Boolean) =
-        withContext(Dispatchers.IO)
+        withContext(ioDispatcher)
         {
             gymDAO.update(GymFavouretState(id = gymId, isFavourite = state))
             return@withContext gymDAO.getAll()

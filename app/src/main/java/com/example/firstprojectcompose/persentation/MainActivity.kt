@@ -1,4 +1,4 @@
-package com.example.firstprojectcompose.gyms.persentation
+package com.example.firstprojectcompose.persentation
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -11,9 +11,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import androidx.navigation.navDeepLink
-import com.example.firstprojectcompose.gyms.persentation.details.GymDeatailsScreen
-import com.example.firstprojectcompose.gyms.persentation.gymList.GymScreen
-import com.example.firstprojectcompose.gyms.persentation.gymList.GymsViewModel
+import com.example.firstprojectcompose.persentation.details.GymDeatailsScreen
+import com.example.firstprojectcompose.persentation.gymList.GymScreen
+import com.example.firstprojectcompose.persentation.gymList.GymsViewModel
 import com.example.firstprojectcompose.ui.theme.FirstProjectComposeTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -23,7 +23,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             FirstProjectComposeTheme {
-                // GymScreen()
                 GymAroundApp()
             }
         }
@@ -41,10 +40,11 @@ class MainActivity : ComponentActivity() {
             composable(route = "gyms")
             {
                 val viewModel: GymsViewModel = hiltViewModel()
-                GymScreen(state = viewModel.stat.value, onItemClick =
-                { id -> navController.navigate("gyms/$id") },
-                    onFavouriteClick =
-                    { id, oldeValue -> viewModel.toggleFavouriteStat(id, oldeValue) })
+                GymScreen(
+                    state = viewModel.stat.value,
+                    onItemClick = { id -> navController.navigate("gyms/$id") },
+                    onFavouriteClick = { id, oldeValue -> viewModel.toggleFavouriteStat(id, oldeValue) }
+                )
             }
             composable(
                 route = "gyms/{gym_id}",

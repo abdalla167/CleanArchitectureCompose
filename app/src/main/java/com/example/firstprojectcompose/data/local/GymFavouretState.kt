@@ -1,4 +1,4 @@
-package com.example.firstprojectcompose.gyms.data.local
+package com.example.firstprojectcompose.data.local
 
 import android.os.Parcelable
 import androidx.room.ColumnInfo

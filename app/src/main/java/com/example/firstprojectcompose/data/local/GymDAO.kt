@@ -1,4 +1,4 @@
-package com.example.firstprojectcompose.gyms.data.local
+package com.example.firstprojectcompose.data.local
 
 import androidx.room.Dao
 import androidx.room.Insert

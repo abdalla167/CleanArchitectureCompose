@@ -1,5 +1,6 @@
-package com.example.firstprojectcompose.gyms.persentation.gymList
+package com.example.firstprojectcompose.persentation.gymList
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -23,43 +24,47 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.firstprojectcompose.gyms.domain.Gym
+import com.example.firstprojectcompose.domain.Gym
+import com.example.firstprojectcompose.persentation.SemanticsDescription
 import com.example.firstprojectcompose.ui.theme.Purple80
 
 @Composable
 fun GymScreen(
-    state:GymsScreenState,
+    state: GymsScreenState,
     onItemClick: (Int) -> Unit,
-    onFavouriteClick: (id:Int,oldvalue:Boolean) -> Unit
+    onFavouriteClick: (id: Int, oldvalue: Boolean) -> Unit
 
 ) {
 
 
-    Box (
+    Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier.fillMaxHeight()
-    ){
+    ) {
         LazyColumn()
         {
             items(state.gym)
             { gym ->
-                GymItem(
-                    gym = gym,
-                    onFavouriteClick = {id,oldalue ->
-                        onFavouriteClick(id,oldalue)
-                                       },
-                    onItemClick = {id->
-                        onItemClick(id)
-                    }
+                GymItem(gym = gym,
+                    onFavouriteClick = { id, oldalue ->
+                        onFavouriteClick(id, oldalue) },
+                    onItemClick = { id ->
+                        onItemClick(id) }
                 )
             }
         }
-        if (state.isLoading) CircularProgressIndicator()
-       state.error?.let {
-           Text(it)
-       }
+        if (state.isLoading) CircularProgressIndicator(
+            Modifier.semantics {
+                this.contentDescription= SemanticsDescription.GYMS_LIST_LOADING
+            }
+        )
+        state.error?.let {
+            Text(it)
+        }
 
     }
 
@@ -67,7 +72,7 @@ fun GymScreen(
 }
 
 @Composable
-fun GymItem(gym: Gym, onFavouriteClick: (Int,Boolean) -> Unit, onItemClick: (Int) -> Unit) {
+fun GymItem(gym: Gym, onFavouriteClick: (Int, Boolean) -> Unit, onItemClick: (Int) -> Unit) {
     val icone = if (gym.isFavourite) {
         Icons.Filled.Favorite
     } else {
@@ -82,7 +87,7 @@ fun GymItem(gym: Gym, onFavouriteClick: (Int,Boolean) -> Unit, onItemClick: (Int
             DefaultIcone(Modifier.weight(0.15f), Icons.Filled.Place, "Location Icone ")
             GymDetails(gym, Modifier.weight(0.70f))
             DefaultIcone(Modifier.weight(0.15f), icone, "Favourite Gym Icon ") {
-                onFavouriteClick(gym.id,gym.isFavourite)
+                onFavouriteClick(gym.id, gym.isFavourite)
             }
         }
     }
@@ -118,6 +123,7 @@ fun GymDetails(
     modifier: Modifier,
     horizontalAlignment: Alignment.Horizontal = Alignment.Start
 ) {
+    Log.d("TAG", "GymDetails: " + gym.name)
     Column(modifier = modifier, horizontalAlignment = horizontalAlignment) {
         Text(
             text = gym.name,

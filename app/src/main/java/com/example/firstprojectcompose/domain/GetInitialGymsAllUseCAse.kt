@@ -1,6 +1,6 @@
-package com.example.firstprojectcompose.gyms.domain
+package com.example.firstprojectcompose.domain
 
-import com.example.firstprojectcompose.gyms.data.GymsReposatery
+import com.example.firstprojectcompose.data.GymsReposatery
 import javax.inject.Inject
 
 
