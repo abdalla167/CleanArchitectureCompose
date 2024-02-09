@@ -15,5 +15,3 @@ dependencyResolutionManagement {
 
 rootProject.name = "FirstProjectCompose"
 include(":app")
-include(":data")
-include(":domian")
